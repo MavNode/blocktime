@@ -88,7 +88,7 @@ try:
                     fast_pct = (fast_blocks / total_blocks * 100) if total_blocks else 0
                     faster_pct = (faster_blocks / total_blocks * 100) if total_blocks else 0
                     fast_note = " ✅ 0-599ms" if per_block < 0.6 else ""
-                    faster_note = " 🟢 0-499ms" if per_block < 0.5 else ""
+                    faster_note = " 🔥 0-499ms" if per_block < 0.5 else ""
 
                     print(
                         f"🧱 Height: {current_height} | "
@@ -96,7 +96,7 @@ try:
                         f"📊 Avg({len(block_times)}): {avg:5.3f}s | "
                         f"⚡ {bps:4.2f} blk/s | "
                         f"✅ 0-599ms: {fast_pct:5.2f}% | "
-                        f"🟢 0-499ms: {faster_pct:5.2f}%"
+                        f"🔥 0-499ms: {faster_pct:5.2f}%"
                         f"{fast_note}{faster_note}"
                     )
 
@@ -117,6 +117,6 @@ except KeyboardInterrupt:
         print(f"🚀 Min block time : {min_bt:.3f}s  (fastest)")
         print(f"🐢 Max block time : {max_bt:.3f}s  (slowest)")
         print(f"✅ 0-599ms blocks : {fast_blocks} ({(fast_blocks / total_blocks * 100):.2f}%)")
-        print(f"🟢 0-499ms blocks : {faster_blocks} ({(faster_blocks / total_blocks * 100):.2f}%)")
+        print(f"🔥 0-499ms blocks : {faster_blocks} ({(faster_blocks / total_blocks * 100):.2f}%)")
     else:
         print("⚠️  No blocks observed")
