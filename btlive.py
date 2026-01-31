@@ -41,6 +41,8 @@ total_blocks = 0
 total_time = 0.0
 min_bt = float("inf")   # fastest (smallest)
 max_bt = 0.0            # slowest (largest)
+fast_blocks = 0         # 0-599ms (0.600s not included)
+faster_blocks = 0       # 0-499ms (0.500s not included)
 
 try:
     while True:
@@ -76,14 +78,26 @@ try:
                     min_bt = min(min_bt, per_block)
                     max_bt = max(max_bt, per_block)
 
+                    if 0 <= per_block < 0.6:
+                        fast_blocks += 1
+                    if 0 <= per_block < 0.5:
+                        faster_blocks += 1
+
                     avg = window_sum / len(block_times)
                     bps = (1 / avg) if avg > 0 else 0
+                    fast_pct = (fast_blocks / total_blocks * 100) if total_blocks else 0
+                    faster_pct = (faster_blocks / total_blocks * 100) if total_blocks else 0
+                    fast_note = " ✅ 0-599ms" if per_block < 0.6 else ""
+                    faster_note = " 🟢 0-499ms" if per_block < 0.5 else ""
 
                     print(
                         f"🧱 Height: {current_height} | "
                         f"⏱ Last: {per_block:5.3f}s | "
                         f"📊 Avg({len(block_times)}): {avg:5.3f}s | "
-                        f"⚡ {bps:4.2f} blk/s"
+                        f"⚡ {bps:4.2f} blk/s | "
+                        f"✅ 0-599ms: {fast_pct:5.2f}% | "
+                        f"🟢 0-499ms: {faster_pct:5.2f}%"
+                        f"{fast_note}{faster_note}"
                     )
 
             last_height = height
@@ -102,5 +116,7 @@ except KeyboardInterrupt:
         print(f"⚡ Avg block time : {final_avg:.3f}s")
         print(f"🚀 Min block time : {min_bt:.3f}s  (fastest)")
         print(f"🐢 Max block time : {max_bt:.3f}s  (slowest)")
+        print(f"✅ 0-599ms blocks : {fast_blocks} ({(fast_blocks / total_blocks * 100):.2f}%)")
+        print(f"🟢 0-499ms blocks : {faster_blocks} ({(faster_blocks / total_blocks * 100):.2f}%)")
     else:
         print("⚠️  No blocks observed")
